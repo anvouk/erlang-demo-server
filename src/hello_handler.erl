@@ -20,5 +20,8 @@ content_types_provided(Req, State) ->
     {[{<<"application/json">>, hello_to_json}], Req, State}.
 
 hello_to_json(Req, State) ->
-    Body = <<"{\"rest\": \"Hello World!\"}">>,
+    Body = jsone:encode(#{
+        <<"library">> => <<"jsone">>,
+        <<"awesome">> => true
+    }),
     {Body, Req, State}.
