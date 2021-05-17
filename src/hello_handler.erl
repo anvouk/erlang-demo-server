@@ -14,14 +14,10 @@ allowed_methods(Req, State) ->
     {[<<"GET">>], Req, State}.
 
 content_types_accepted(Req, State) ->
-    {[
-        {<<"application/json">>, hello_to_json}
-    ], Req, State}.
+    {[{<<"application/json">>, hello_to_json}], Req, State}.
 
 content_types_provided(Req, State) ->
-    {[
-        {<<"application/json">>, hello_to_json}
-    ], Req, State}.
+    {[{<<"application/json">>, hello_to_json}], Req, State}.
 
 hello_to_json(Req, State) ->
     Body = <<"{\"rest\": \"Hello World!\"}">>,

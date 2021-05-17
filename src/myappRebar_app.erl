@@ -12,13 +12,14 @@ start(_StartType, _StartArgs) ->
             {"/api/[:id]", hello_handler, []}
         ]}
     ]),
+    {Port, _} = string:to_integer(os:getenv("HTTP_PORT", "8080")),
     %% otp 21+ speedup
     persistent_term:put(my_app_dispatch, Dispatch),
     %% Name, TransOpts, ProtoOpts
-    {ok, _} = cowboy:start_clear(my_http_listener, [{port, 8080}], #{
+    {ok, _} = cowboy:start_clear(my_http_listener, [{port, Port}], #{
         env => #{dispatch => {persistent_term, my_app_dispatch}}
     }),
-    lager:info("application started"),
+    lager:info("server listening at http://localhost:~p", [Port]),
     myappRebar_sup:start_link().
 
 stop(_State) ->

@@ -1,16 +1,16 @@
-{application, myappRebar,
- [{description, "Demo OTP application"},
-  {vsn, "0.1.0"},
-  {registered, []},
-  {mod, {myappRebar_app, []}},
-  {applications,
-   [kernel,
-    stdlib,
-    lager,
-    cowboy
-   ]},
-  {env,[]},
-  {modules, []},
-  {licenses, ["Apache 2.0"]},
-  {links, []}
- ]}.
+{application, myappRebar, [
+    {description, "Demo OTP application"},
+    {vsn, "0.1.0"},
+    {registered, []},
+    {mod, {myappRebar_app, []}},
+    {applications, [
+        kernel,
+        stdlib,
+        lager,
+        cowboy
+    ]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache 2.0"]},
+    {links, []}
+]}.
