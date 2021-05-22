@@ -7,19 +7,25 @@
 start(_StartType, _StartArgs) ->
     lager:start(),
     Dispatch = cowboy_router:compile([
-        %% {HostMatch, list({PathMatch, Handler, InitialState})}
+        % {HostMatch, list({PathMatch, Handler, InitialState})}
         {'_', [
-            {"/api/[:id]", hello_handler, []}
+            {"/api", myappRebar_handler_api, []}
         ]}
     ]),
     {Port, _} = string:to_integer(os:getenv("HTTP_PORT", "8080")),
-    %% otp 21+ speedup
+    % otp 21+ speedup
     persistent_term:put(my_app_dispatch, Dispatch),
-    %% Name, TransOpts, ProtoOpts
+    % Name, TransOpts, ProtoOpts
     {ok, _} = cowboy:start_clear(my_http_listener, [{port, Port}], #{
-        env => #{dispatch => {persistent_term, my_app_dispatch}}
+        env => #{dispatch => {persistent_term, my_app_dispatch}},
+        middlewares => [
+            myappRebar_cowboy_middleware_logger,
+            cowboy_router,
+            myappRebar_cowboy_middleware_helmet,
+            cowboy_handler
+        ]
     }),
-    lager:info("server listening at http://localhost:~p", [Port]),
+    lager:notice("server listening at http://localhost:~p", [Port]),
     myappRebar_sup:start_link().
 
 stop(_State) ->
