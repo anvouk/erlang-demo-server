@@ -20,15 +20,27 @@ content_types_accepted(Req, State) ->
 content_types_provided(Req, State) ->
     {[{<<"application/json">>, handle}], Req, State}.
 
-handle(Req0 = #{method := <<"GET">>}, State) ->
-    Body = jsone:encode(#{
-        <<"method">> => cowboy_req:method(Req0)
+retrieve_json_data(Uri) ->
+    case httpc:request(get, {Uri, []}, [], []) of
+        {ok, {{_, 200, _}, _Headers, Body}} ->
+            lager:debug("received data: ~s", [Body]),
+            % TODO: is this conversion ok? cannot find alternatives...
+            {ok, jsone:decode(erlang:list_to_binary(Body))};
+        {error, Reason} ->
+            {error, Reason}
+    end.
+
+handle(Req = #{method := <<"GET">>}, State) ->
+    {ok, RetrievedData} = retrieve_json_data("https://jsonplaceholder.typicode.com/todos/1"),
+    ResBody = jsone:encode(#{
+        <<"method">> => cowboy_req:method(Req),
+        <<"data">> => RetrievedData
     }),
-    Req = cowboy_req:reply(200, #{}, Body, Req0),
-    {stop, Req, State};
-handle(Req0 = #{method := <<"POST">>}, State) ->
+    Res = cowboy_req:reply(200, #{}, ResBody, Req),
+    {stop, Res, State};
+handle(Req = #{method := <<"POST">>}, State) ->
     Body = jsone:encode(#{
-        <<"method">> => cowboy_req:method(Req0)
+        <<"method">> => cowboy_req:method(Req)
     }),
-    Req = cowboy_req:reply(200, #{}, Body, Req0),
-    {stop, Req, State}.
+    Res = cowboy_req:reply(200, #{}, Body, Req),
+    {stop, Res, State}.

@@ -5,7 +5,6 @@
 -export([start/2, stop/1]).
 
 start(_StartType, _StartArgs) ->
-    lager:start(),
     Dispatch = cowboy_router:compile([
         % {HostMatch, list({PathMatch, Handler, InitialState})}
         {'_', [
