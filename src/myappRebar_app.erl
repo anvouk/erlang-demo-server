@@ -5,10 +5,14 @@
 -export([start/2, stop/1]).
 
 start(_StartType, _StartArgs) ->
+    {ok, _} = erlydtl:compile_dir("templates", html_templates),
     Dispatch = cowboy_router:compile([
         % {HostMatch, list({PathMatch, Handler, InitialState})}
         {'_', [
-            {"/api", myappRebar_handler_api, []}
+            {"/", myappRebar_handler_home, []},
+            {"/api", myappRebar_handler_api, []},
+            {"/sso/login", myappRebar_handler_ui, []},
+            {"/sso/[...]", cowboy_static, {dir, "client"}}
         ]}
     ]),
     {Port, _} = string:to_integer(os:getenv("HTTP_PORT", "8080")),

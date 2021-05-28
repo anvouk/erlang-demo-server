@@ -1,0 +1,19 @@
+{% extends "base.dtl" %}
+
+{% block head %}
+    <link rel="stylesheet" href="css/sso.css">
+    <title>Login</title>
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="/sso/login">
+        <div class="label">Login</div>
+        <div class="username">
+            <input id="username" type="text" placeholder="Username" name="email" maxlength="64" required="">
+        </div>
+        <div class="password">
+            <input id="password" type="password" placeholder="Password" name="password" required="">
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    </form>
+{% endblock %}
