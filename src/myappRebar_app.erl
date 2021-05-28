@@ -17,11 +17,12 @@ start(_StartType, _StartArgs) ->
     % Name, TransOpts, ProtoOpts
     {ok, _} = cowboy:start_clear(my_http_listener, [{port, Port}], #{
         env => #{dispatch => {persistent_term, my_app_dispatch}},
+        stream_handlers => [cowboy_compress_h, cowboy_stream_h],
         middlewares => [
-            myappRebar_cowboy_middleware_logger,
             cowboy_router,
             myappRebar_cowboy_middleware_helmet,
-            cowboy_handler
+            cowboy_handler,
+            myappRebar_cowboy_middleware_logger
         ]
     }),
     lager:notice("server listening at http://localhost:~p", [Port]),
