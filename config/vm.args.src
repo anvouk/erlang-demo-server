@@ -1,0 +1,6 @@
+-name ${NODE_NAME}
+
+-setcookie ${NODE_COOKIE}
+
++K true
++A30

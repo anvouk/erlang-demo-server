@@ -1,6 +1,8 @@
-%% application config file
-
 [
+    %% application config
+    {myappRebar, [
+        {port, ${PORT}}
+    ]},
     %% format log timestamps as UTC
     {sasl, [{utc_log, true}]},
     %% lager config
@@ -8,7 +10,7 @@
         {colored, false},
         {handlers, [
             {lager_console_backend, [
-                {level, debug},
+                {level, ${LOG_LEVEL}}, %% debug, info, error, ...
                 {formatter, lager_default_formatter},
                 {formatter_config, ["[",date," ",time,"]","[",severity_upper,"] ",module,":",line," - ",message,"\n"]}
             ]}

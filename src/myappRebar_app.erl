@@ -15,7 +15,7 @@ start(_StartType, _StartArgs) ->
             {"/sso/[...]", cowboy_static, {dir, "client"}}
         ]}
     ]),
-    {Port, _} = string:to_integer(os:getenv("HTTP_PORT", "8080")),
+    Port = application:get_env(myappRebar, port, 8080),
     % otp 21+ speedup
     persistent_term:put(my_app_dispatch, Dispatch),
     % Name, TransOpts, ProtoOpts
